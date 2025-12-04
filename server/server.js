@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // allow React frontend
+    origin: "https://chat-app-y9ed.vercel.app/", // allow React frontend
     methods: ["GET", "POST"]
   }
 });
