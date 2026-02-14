@@ -1,23 +1,17 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Root dependencies
+node_modules/
+/client/node_modules/
+/server/node_modules/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Production builds
+/client/build/
+/server/dist/
 
-# testing
-/coverage
+# Logs and Cache
+*.log
+.eslintcache
+client/node_modules/.cache/
 
-# production
-/build
-
-# misc
-.DS_Store
+# Security (Supabase keys)
+.env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
