@@ -1,74 +1,117 @@
-<<<<<<< HEAD
-# Getting Started with Create React App
+# 💬 Real-Time Chat App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, real-time chat application built with **React**, **Node.js**, **Socket.io**, and **Supabase**. This project enables users to communicate instantly through a sleek and responsive interface.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Key Features
 
-### `npm start`
+- **Real-Time Messaging**: Instant message delivery using Socket.io.
+- **Modern UI**: Clean and intuitive design built with React.
+- **Supabase Integration**: Backend power for authentication and data management.
+- **Responsive Design**: Works seamlessly across desktops, tablets, and mobile devices.
+- **Scalable Backend**: Robust Node.js & Express server for handling concurrent connections.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Tech Stack
 
-### `npm test`
+### **Frontend**
+- [React](https://reactjs.org/) (Create React App)
+- [Socket.io-client](https://socket.io/docs/v4/client-api/)
+- [Supabase JS SDK](https://supabase.com/docs/reference/javascript/introduction)
+- [CSS3](https://developer.mozilla.org/en-US/docs/Web/CSS) (Vanilla CSS)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **Backend**
+- [Node.js](https://nodejs.org/)
+- [Express](https://expressjs.com/)
+- [Socket.io](https://socket.io/)
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📂 Project Structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```text
+CHAT-APP/
+├── client/          # React frontend application
+│   ├── src/
+│   │   ├── components/  # Reusable UI components
+│   │   ├── contexts/    # React Context providers
+│   │   ├── pages/       # Page-level components
+│   │   └── services/    # API and Socket services
+├── server/          # Node.js Express server
+│   └── server.js    # Entry point for backend
+└── .gitignore       # Git ignore rules
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## ⚙️ Getting Started
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### **Prerequisites**
+- Node.js (v16+ recommended)
+- npm or pnpm
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### **Installation**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Shree-Thecreator/CHAT-APP.git
+   cd CHAT-APP
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. **Setup the Backend:**
+   ```bash
+   cd server
+   npm install
+   ```
 
-## Learn More
+3. **Setup the Frontend:**
+   ```bash
+   cd ../client
+   npm install
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### **Running the Application**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Start the Server:**
+   ```bash
+   cd server
+   npm start
+   ```
+   *The server will run on `http://localhost:4000`*
 
-### Code Splitting
+2. **Start the Client:**
+   ```bash
+   cd ../client
+   npm start
+   ```
+   *The app will be available at `http://localhost:3000`*
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## 🔐 Environment Variables
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To run this project, you will need to add the following environment variables to your `.env` files.
 
-### Making a Progressive Web App
+### **Frontend (.client/.env)**
+```env
+REACT_APP_SUPABASE_URL=your_supabase_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 🤝 Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📝 License
 
-### `npm run build` fails to minify
+Distributed under the MIT License. See `LICENSE` for more information.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
-# CHAT-APP
->>>>>>> 86ea35b1772ef3f8ee1e7471fb1b282dbaac4bd2
+---
+
+Developed with ❤️ by [Shree-Thecreator](https://github.com/Shree-Thecreator)
