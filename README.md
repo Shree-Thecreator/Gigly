@@ -1,6 +1,6 @@
-# 💬 Real-Time Chat App
+# 💬 Gigly
 
-A modern, real-time chat application built with **Next.js**, **TypeScript**, **Node.js**, **Socket.io**, and **Supabase**. This project enables users to communicate instantly through a sleek and premium interface.
+**Gigly** is a modern, real-time chat application built with **Next.js**, **TypeScript**, **Node.js**, **Socket.io**, and **Supabase**.
 
 ---
 

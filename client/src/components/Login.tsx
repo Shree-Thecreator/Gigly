@@ -2,12 +2,14 @@
 
 import { FormEvent, useState } from 'react';
 import { supabase } from '../services/supabase';
+import { useToast } from './ToastProvider';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
+  const { showToast } = useToast();
 
   const handleAuth = async (e: FormEvent) => {
     e.preventDefault();
@@ -23,12 +25,12 @@ const Login = () => {
     const { error } = result;
 
     if (error) {
-      alert(error.message);
+      showToast(error.message, "error");
     } else {
       if (isSignUp) {
-        alert('Registration almost complete! Please check your email for the confirmation link.');
+        showToast('Registration almost complete! Please check your email for the confirmation link.', "info");
       } else {
-        alert('Logged in successfully!');
+        showToast('Logged in successfully!', "success");
       }
     }
     setLoading(false);

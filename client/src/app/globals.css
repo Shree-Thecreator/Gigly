@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-main: "Inter", sans-serif;
-  --font-heading: "Outfit", sans-serif;
+  --font-main: var(--font-inter), sans-serif;
+  --font-heading: var(--font-outfit), sans-serif;
 
   --color-primary: #6366f1;
   --color-primary-hover: #4f46e5;
@@ -12,8 +12,6 @@
   --color-success: #10b981;
   --color-error: #ef4444;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 body {
   background-color: var(--color-dark-bg);

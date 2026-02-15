@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { supabase } from "../services/supabase";
+import { useToast } from "./ToastProvider";
 
 const SOCKET_URL: string = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
 
@@ -22,6 +23,7 @@ export default function ChatWindow() {
   const [pin, setPin] = useState<string>("");
   const [isInRoom, setIsInRoom] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (!socket) {
@@ -49,7 +51,7 @@ export default function ChatWindow() {
 
   const handleJoinRoom = async () => {
     if (!roomName || !pin) {
-      alert("Please enter both Room Name and PIN");
+      showToast("Please enter both Room Name and Secret Key", "info");
       return;
     }
 
@@ -60,7 +62,7 @@ export default function ChatWindow() {
       .single();
 
     if (error || !data) {
-      alert("Room not found!");
+      showToast("Room not found!", "error");
       return;
     }
 
@@ -69,8 +71,9 @@ export default function ChatWindow() {
         socket.emit("join_room", roomName);
       }
       setIsInRoom(true);
+      showToast(`Welcome to ${roomName}!`, "success");
     } else {
-      alert("Incorrect PIN!");
+      showToast("Incorrect Secret Key!", "error");
     }
   };
 
@@ -94,7 +97,7 @@ export default function ChatWindow() {
         <div className="bg-dark-card backdrop-blur-xl border border-white/10 rounded-[24px] p-10 w-full max-w-[380px] text-center animate-in fade-in zoom-in-95 duration-500 shadow-2xl">
           <div className="w-10 h-10 bg-primary rounded-xl flex justify-center items-center text-xl shadow-[0_4px_12px_rgba(99,102,241,0.3)] mx-auto mb-5 text-white">🔐</div>
           <h2 className="text-[28px] mb-2 font-extrabold text-white">Enter Room</h2>
-          <p className="text-slate-400 mb-6 text-sm">Provide the room name and secret PIN to join the conversation.</p>
+          <p className="text-slate-400 mb-6 text-sm">Provide the room name and secret key to join the conversation.</p>
 
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-2 text-left">
@@ -108,12 +111,11 @@ export default function ChatWindow() {
             </div>
 
             <div className="flex flex-col gap-2 text-left">
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Secret PIN</label>
+              <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Secret Key</label>
               <input
-                placeholder="••••"
+                placeholder="••••••••"
                 type="password"
                 value={pin}
-                maxLength={4}
                 onChange={(e) => setPin(e.target.value)}
                 className="bg-black/20 border border-white/10 rounded-xl p-3.5 text-white text-[15px] transition-all outline-none focus:border-primary focus:bg-black/30"
               />
@@ -158,8 +160,8 @@ export default function ChatWindow() {
             className={`flex w-full ${msg.sender === socket?.id ? 'justify-end' : 'justify-start'}`}
           >
             <div className={`max-w-[70%] p-3 px-4 rounded-[18px] relative text-[15px] leading-relaxed shadow-sm transition-transform hover:scale-[1.02] ${msg.sender === socket?.id
-                ? 'bg-primary text-white rounded-br-none'
-                : 'bg-slate-800 text-white border border-white/10 rounded-bl-none'
+              ? 'bg-primary text-white rounded-br-none'
+              : 'bg-slate-800 text-white border border-white/10 rounded-bl-none'
               }`}>
               {msg.text}
               <small className="block text-[10px] mt-1 opacity-70 text-right">{msg.time}</small>
