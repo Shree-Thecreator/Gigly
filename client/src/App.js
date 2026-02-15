@@ -2,6 +2,7 @@ import React from "react";
 // Importing the UI components you created in the components folder
 import ChatWindow from "./components/ChatWindow";
 import Login from "./components/Login"; 
+import './App.css'; // Import the centering styles
 // Importing the Auth logic and the Supabase client
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { supabase } from "./services/supabase";

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../services/supabase';
+import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -36,32 +37,43 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container" style={{ textAlign: 'center', marginTop: '100px' }}>
-      <h2>{isSignUp ? 'Create Account' : 'Login to Chat'}</h2>
-      <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '300px', margin: '0 auto' }}>
+    /* 1. Changed className to "login-card" to match your CSS file. 
+       2. Removed inline style={{ textAlign: 'center', marginTop: '100px' }} 
+          so your Login.css can take control. 
+    */
+    <div className="login-card">
+      <h2 className="login-title">
+        {isSignUp ? 'Create Account' : 'Login to Chat'}
+      </h2>
+
+      <form onSubmit={handleAuth} className="login-form">
+        <span className="login-label">Email Address</span>
         <input 
           type="email" 
           placeholder="Email" 
           value={email} 
           onChange={(e) => setEmail(e.target.value)} 
           required 
-          style={{ padding: '8px' }}
+          className="login-input"
         />
+
+        <span className="login-label">Password</span>
         <input 
           type="password" 
           placeholder="Password" 
           value={password} 
           onChange={(e) => setPassword(e.target.value)} 
           required 
-          style={{ padding: '8px' }}
+          className="login-input"
         />
-        <button type="submit" disabled={loading} style={{ padding: '10px', cursor: 'pointer' }}>
+
+        <button type="submit" disabled={loading} className="login-button">
           {loading ? 'Processing...' : (isSignUp ? 'Sign Up' : 'Login')}
         </button>
       </form>
       
       <p 
-        style={{ marginTop: '15px', cursor: 'pointer', color: 'blue', textDecoration: 'underline' }} 
+        className="login-toggle"
         onClick={() => setIsSignUp(!isSignUp)}
       >
         {isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign Up"}

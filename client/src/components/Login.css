@@ -1,0 +1,67 @@
+/* Login.css */
+.login-card {
+  background: rgba(248, 242, 242, 0.02);
+  backdrop-filter: blur(20px);
+  border: 20px solid rgba(229, 233, 216, 0.1);
+  border-radius: 40px;
+  padding: 50px 40px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  color: rgb(2, 2, 2);
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+}
+
+.login-label {
+  color: #07032c; /* Your Pink Theme */
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  display: block;
+  text-align: left;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: rgb(11, 11, 11);
+  outline: none;
+}
+
+.login-button {
+  width: 100%;
+  padding: 15px;
+  background: #020218;
+  color: rgb(250, 247, 247);
+  border: none;
+  border-radius: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-button:hover {
+  background: #0f0e0f;
+  transform: scale(1.02);
+}
+
+.login-toggle {
+  margin-top: 20px;
+  cursor: pointer;
+  color: rgba(3, 0, 0, 0.4);
+  font-size: 14px;
+}

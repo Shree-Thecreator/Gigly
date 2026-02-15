@@ -1,6 +1,17 @@
 .App {
   text-align: center;
 }
+/* This styles the wrapper around your Login component */
+.app-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;     /* Centers vertically */
+  min-height: 100vh;       /* Takes up the full height of the screen */
+  width: 100%;
+  background-color: #000;  /* Your black theme background */
+  margin: 0;
+  padding: 0;
+}
 
 .App-logo {
   height: 40vmin;
