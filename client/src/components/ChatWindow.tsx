@@ -59,7 +59,7 @@ export default function ChatWindow() {
       .from('rooms')
       .select('*')
       .eq('name', roomName)
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       showToast("Room not found!", "error");
@@ -86,7 +86,6 @@ export default function ChatWindow() {
         sender: socket.id || ""
       };
       socket.emit("send_message", msgData);
-      setChat((prev) => [...prev, msgData]);
       setMessage("");
     }
   };
