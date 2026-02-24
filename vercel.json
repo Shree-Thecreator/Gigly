@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "pnpm --filter client build",
+  "buildCommand": "pnpm --filter gigly-client build",
   "outputDirectory": "client/.next",
   "framework": "nextjs"
 }
