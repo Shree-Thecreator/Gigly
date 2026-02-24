@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd client && pnpm install && next build",
+  "buildCommand": "pnpm --filter client build",
   "outputDirectory": "client/.next",
-  "installCommand": "cd client && pnpm install",
   "framework": "nextjs"
 }

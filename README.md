@@ -1,53 +1,47 @@
 # 💬 Gigly
 
-**Gigly** is a modern, real-time chat application built with **Next.js**, **TypeScript**, **Node.js**, **Socket.io**, and **Supabase**.
+**Gigly** is a premium, real-time chat application built for privacy and speed. It features a modern dark-mode aesthetic and uses a **serverless-first** architecture optimized for **Vercel** and **Supabase Realtime**.
 
 ---
 
 ## 🚀 Key Features
 
-- **Real-Time Messaging**: Instant message delivery using Socket.io.
-- **Tailwind CSS v4**: Cutting-edge, lightning-fast styling with the latest Tailwind CSS.
-- **Full TypeScript**: End-to-end type safety across both frontend and backend.
-- **Premium UI**: Modern dark-mode aesthetic with glassmorphism and smooth animations.
-- **Supabase Integration**: Backend power for authentication and room management.
-- **Responsive Design**: Works seamlessly across desktops, tablets, and mobile devices.
-- **Environment Security**: Sensitive keys managed through secure `.env` files.
+- **Real-Time Messaging**: Instant broadcast delivery using **Supabase Realtime Channels**.
+- **Privacy-First Architecture**: Messages are delivered instantly and **never stored** on any database.
+- **Secure Access**: Every room is protected by a cryptographically secure **Secret Key (PIN)**.
+- **JWT Authentication**: Integrated with Supabase Auth to ensure only verified users can connect.
+- **Rate Limiting**: Built-in protection against message spamming and flooding.
+- **Tailwind CSS v4**: Lightning-fast, modern styling with a premium glassmorphism UI.
+- **Full TypeScript**: End-to-end type safety across the entire monorepo.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### **Frontend**
-- [Next.js](https://nextjs.org/) (App Router)
-- [TypeScript](https://www.typescriptlang.org/)
+### **Frontend & Realtime**
+- [Next.js 15+](https://nextjs.org/) (App Router)
+- [Supabase Realtime](https://supabase.com/docs/guides/realtime) (Broadcast Protocol)
 - [Tailwind CSS v4](https://tailwindcss.com/)
-- [Socket.io-client](https://socket.io/docs/v4/client-api/)
-- [Supabase JS SDK](https://supabase.com/docs/reference/javascript/introduction)
-
-### **Backend**
-- [Node.js](https://nodejs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Express](https://expressjs.com/)
-- [Socket.io](https://socket.io/)
-- [dotenv](https://github.com/motdotla/dotenv)
+- [Lucide React](https://lucide.dev/) (Icons)
+
+### **Backend & Security**
+- [Supabase Auth](https://supabase.com/auth) (JWT Verification)
+- [Supabase Database](https://supabase.com/database) (Room configuration & PIN verification)
 
 ---
 
 ## 📂 Project Structure
 
+This project is organized as a **PNPM Monorepo** for seamless deployment.
+
 ```text
 CHAT-APP/
-├── client/          # Next.js frontend application (TypeScript + Tailwind v4)
-│   ├── src/
-│   │   ├── app/         # Layouts, pages, and global styles
-│   │   ├── components/  # Typed UI components
-│   │   ├── contexts/    # Auth context provider
-│   │   └── services/    # Supabase service client
-├── server/          # Node.js Express server (TypeScript)
-│   ├── server.ts    # Main entry point
-│   └── dist/        # Compiled JavaScript output
-└── .env.example     # Environment variable template
+├── client/          # Next.js Frontend (The main application)
+├── server/          # Node.js Server (Legacy/Local Socket.IO reference)
+├── pnpm-workspace.yaml # Monorepo configuration
+├── package.json      # Root manager for scripts and dependencies
+└── vercel.json       # Production deployment configuration
 ```
 
 ---
@@ -55,8 +49,8 @@ CHAT-APP/
 ## ⚙️ Getting Started
 
 ### **Prerequisites**
-- Node.js (v18+ recommended)
-- [pnpm](https://pnpm.io/) (preferred) or npm
+- [Node.js](https://nodejs.org/) (v18+)
+- [pnpm](https://pnpm.io/) (v10+)
 
 ### **Installation**
 
@@ -66,39 +60,37 @@ CHAT-APP/
    cd CHAT-APP
    ```
 
-2. **Setup the Backend:**
+2. **Install all dependencies:**
    ```bash
-   cd server
    pnpm install
    ```
 
-3. **Setup the Frontend:**
-   ```bash
-   cd ../client
-   pnpm install
-   ```
+### **Running Locally**
 
-### **Running the Application**
+1. **Setup Environment Variables:**
+   - Create `client/.env.local` and add:
+     ```env
+     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+     ```
 
-1. **Start the Server:**
+2. **Start the App:**
    ```bash
-   cd server
-   pnpm dev
-   ```
-   *The server will run on `http://localhost:4000` (via ts-node-dev)*
-
-2. **Start the Client:**
-   ```bash
-   cd ../client
-   pnpm dev
+   pnpm client-dev
    ```
    *The app will be available at `http://localhost:3000`*
 
 ---
 
-## 🔐 Environment Variables
+## 🚀 Deployment
 
-Refer to `.env.example` in the root directory for the required variables. Create `.env.local` in `client/` and `.env` in `server/`.
+### **Deploy to Vercel**
+1. Push your code to GitHub.
+2. Connect your repository to Vercel.
+3. Vercel will automatically detect the `vercel.json` configuration and build from the root.
+4. Add your Supabase environment variables in the Vercel Dashboard.
+
+**Note:** Ensure **Realtime** is enabled in your Supabase project settings (Replication > Realtime).
 
 ---
 

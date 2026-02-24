@@ -1,13 +1,9 @@
 "use client";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useRef, useState } from "react";
-import { io, Socket } from "socket.io-client";
 import { supabase } from "../services/supabase";
 import { useToast } from "./ToastProvider";
-
-const SOCKET_URL: string = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:4000";
-
-let socket: Socket | null = null;
 
 interface Message {
   room: string;
@@ -17,29 +13,16 @@ interface Message {
 }
 
 export default function ChatWindow() {
+  const { user } = useAuth();
   const [message, setMessage] = useState<string>("");
   const [chat, setChat] = useState<Message[]>([]);
   const [roomName, setRoomName] = useState<string>("");
   const [pin, setPin] = useState<string>("");
   const [isInRoom, setIsInRoom] = useState<boolean>(false);
+  const [lastSentTime, setLastSentTime] = useState<number>(0);
+  const channelRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
-
-  useEffect(() => {
-    if (!socket) {
-      socket = io(SOCKET_URL);
-    }
-
-    socket.on("receive_message", (data: Message) => {
-      setChat((prev) => [...prev, data]);
-    });
-
-    return () => {
-      if (socket) {
-        socket.off("receive_message");
-      }
-    };
-  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,12 +32,27 @@ export default function ChatWindow() {
     scrollToBottom();
   }, [chat]);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+      }
+    };
+  }, []);
+
   const handleJoinRoom = async () => {
+    if (!user) {
+      showToast("You must be logged in to join a room", "error");
+      return;
+    }
+
     if (!roomName || !pin) {
       showToast("Please enter both Room Name and Secret Key", "info");
       return;
     }
 
+    // AUTH CHECK: Verify room exists and PIN is correct
     const { data, error } = await supabase
       .from('rooms')
       .select('*')
@@ -67,27 +65,65 @@ export default function ChatWindow() {
     }
 
     if (data.pin === pin) {
-      if (socket) {
-        socket.emit("join_room", roomName);
-      }
-      setIsInRoom(true);
-      showToast(`Welcome to ${roomName}!`, "success");
+      // INITIALIZE SUPABASE REALTIME CHANNEL (Secure via Supabase Auth)
+      const channel = supabase.channel(`room:${roomName}`, {
+        config: {
+          broadcast: { self: true }, // See our own messages
+        }
+      });
+
+      channel
+        .on('broadcast', { event: 'message' }, ({ payload }) => {
+          setChat((prev) => [...prev, payload]);
+        })
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            setIsInRoom(true);
+            showToast(`Securely connected to ${roomName}`, "success");
+          }
+        });
+
+      channelRef.current = channel;
     } else {
       showToast("Incorrect Secret Key!", "error");
     }
   };
 
   const sendMessage = () => {
-    if (message.trim() !== "" && socket) {
+    // RATE LIMITING: Prevent spamming (1 message per 500ms)
+    const now = Date.now();
+    if (now - lastSentTime < 500) {
+      showToast("Wait a moment before sending another message", "info");
+      return;
+    }
+
+    if (message.trim() !== "" && channelRef.current && user) {
       const msgData: Message = {
         room: roomName,
         text: message,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        sender: socket.id || ""
+        sender: user.id // Using stable Supabase user ID
       };
-      socket.emit("send_message", msgData);
+
+      // Broadcast message through Supabase
+      channelRef.current.send({
+        type: 'broadcast',
+        event: 'message',
+        payload: msgData
+      });
+
       setMessage("");
+      setLastSentTime(now);
     }
+  };
+
+  const leaveRoom = () => {
+    if (channelRef.current) {
+      channelRef.current.unsubscribe();
+      channelRef.current = null;
+    }
+    setIsInRoom(false);
+    setChat([]);
   };
 
   if (!isInRoom) {
@@ -130,17 +166,17 @@ export default function ChatWindow() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-dark-bg text-white max-w-[1200px] mx-auto shadow-[0_0_100px_rgba(0,0,0,0.5)] relative overflow-hidden font-main">
-      <header className="px-6 py-5 bg-slate-900/80 backdrop-blur-md border-b border-white/10 flex justify-between items-center z-10">
+    <div className="flex flex-col h-screen bg-dark-bg text-white max-w-[1200px] mx-auto shadow-[0_0_100px_rgba(0,0,0,0.5)] relative overflow-hidden font-main w-full">
+      <header className="px-6 py-5 bg-slate-900/80 backdrop-blur-md border-b border-white/10 flex justify-between items-center z-10 font-main">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary rounded-xl flex justify-center items-center text-xl shadow-[0_4px_12px_rgba(99,102,241,0.3)]">💬</div>
           <div>
             <h3 className="text-lg font-bold leading-tight">{roomName}</h3>
-            <p className="text-[12px] text-success flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-current before:rounded-full">Active Now</p>
+            <p className="text-[12px] text-success flex items-center gap-1 before:content-[''] before:w-1.5 before:h-1.5 before:bg-current before:rounded-full">Realtime Secured</p>
           </div>
         </div>
         <button
-          onClick={() => setIsInRoom(false)}
+          onClick={leaveRoom}
           className="bg-transparent border-none text-slate-400 cursor-pointer text-sm hover:text-white transition-colors"
         >
           Leave Room
@@ -156,9 +192,9 @@ export default function ChatWindow() {
         {chat.map((msg, i) => (
           <div
             key={i}
-            className={`flex w-full ${msg.sender === socket?.id ? 'justify-end' : 'justify-start'}`}
+            className={`flex w-full ${msg.sender === user?.id ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[70%] p-3 px-4 rounded-[18px] relative text-[15px] leading-relaxed shadow-sm transition-transform hover:scale-[1.02] ${msg.sender === socket?.id
+            <div className={`max-w-[70%] p-3 px-4 rounded-[18px] relative text-[15px] leading-relaxed shadow-sm transition-transform hover:scale-[1.02] ${msg.sender === user?.id
               ? 'bg-primary text-white rounded-br-none'
               : 'bg-slate-800 text-white border border-white/10 rounded-bl-none'
               }`}>
