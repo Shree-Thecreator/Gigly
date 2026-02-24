@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "server.ts",
   "scripts": {
-   "dev": "ts-node ./server.ts",
-   "build": "tsc",
-    "start": "node dist/server.js"
+    "dev": "ts-node server/server.ts",
+    "build": "tsc -p server/tsconfig.json",
+    "start": "node server/dist/server.js"
   },
   "dependencies": {
     "express": "^4.21.0",
